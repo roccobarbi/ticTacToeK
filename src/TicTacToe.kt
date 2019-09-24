@@ -14,7 +14,7 @@ import java.util.Scanner
 class TicTacToe {
 
     val BOARD_SIZE = 3 // Lato del tabellone
-    val DEBUG = true // Debug mode
+    val DEBUG: Boolean // Debug mode can be set only when the object is constructed
 
     // Private fields
     private var board: IntArray? = null
@@ -28,9 +28,10 @@ class TicTacToe {
     private var iterations: Long = 0
 
     // Constructors
-    init {
+    constructor (debug: Boolean = false) {
         val boardLength = Math.pow(BOARD_SIZE.toDouble(), 2.0).toInt()
         board = IntArray(boardLength)
+        DEBUG = debug
         for (i in 0 until boardLength) {
             board!![i] = 0
         }
@@ -297,12 +298,13 @@ class TicTacToe {
 }
 
 // main method
-fun main() {
+fun main(args: Array<String>) {
     val keyboard = Scanner(System.`in`)
     var play = true
     var repeatInput: Boolean
     var input: String
-    val game = TicTacToe()
+    val debug = "--debug" in args
+    val game = TicTacToe(debug)
 
     println("This program is going to play tic tac toe with you.")
     println("Each slot on the board is represented by a number, like this:")
