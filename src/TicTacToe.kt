@@ -96,12 +96,6 @@ class TicTacToe(debug: Boolean = false) {
         var scoreChanged = false
         iterations++
 
-        /*// Local copy of the board
-		int tempBoard[] = new int[board.length];
-		for(int i = 0; i < board.length; i++){
-			tempBoard[i] = board[i];
-		}*/
-
         if (checkVictory(tempBoard) == human) { // Caso base: vince l'avversario
             return depth - 11
         }
