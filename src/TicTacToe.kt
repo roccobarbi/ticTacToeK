@@ -36,13 +36,13 @@ class TicTacToe {
 
     // Constructors
     init {
-        val boardLength = Math.pow(BOARD_SIZE.toDouble(), 2.0) as Int
+        val boardLength = Math.pow(BOARD_SIZE.toDouble(), 2.0).toInt()
         board = IntArray(boardLength)
         for (i in 0 until boardLength) {
             board!![i] = 0
         }
         // Choose randomly who plays first.
-        computer = Math.round(Math.random()) as Int + 1
+        computer = Math.round(Math.random()).toInt() + 1
         human = if (computer == 1) 2 else 1
         winner = 0
         // Zeroes the counters
@@ -73,7 +73,7 @@ class TicTacToe {
     // Private methods
     private fun chooseMove2(): Int { // To record the iterations and duration for debugging purposes
         var move = board!!.size / 2 // Default move
-        var currentScore = 0
+        var currentScore: Int
         var maxScore = -100
 
         // Local copy of the board
@@ -107,7 +107,7 @@ class TicTacToe {
 
     private fun evaluateTree2(tempBoard: IntArray, depth: Int): Int { // A better, self-contained version
         var score = 0
-        var currentScore = 0
+        var currentScore: Int
         var noMovesAvailable = true // Default: the game is a draw at this stage
         var scoreChanged = false
         iterations++
@@ -160,7 +160,7 @@ class TicTacToe {
 
     private fun chooseMove(): Int {
         var move = board!!.size / 2 // Default move
-        var currentValue = 0.0
+        var currentValue: Double
         var maxValue = 0.0 // the current and maximum tree evaluation up to now
         val tempBoard = IntArray(board!!.size)
         var boardSum = 0 // Checks if all cells are empty and moves to center.
@@ -181,7 +181,7 @@ class TicTacToe {
                     if (DEBUG) println("Cell " + (i + 1) + " instant loss not found! Current value: " + currentValue)
                 }
                 tempBoard[i] = computer // Assign the move to the temporary board
-                currentValue += evaluateTree(i, 0, tempBoard)
+                currentValue += evaluateTree(0, tempBoard)
                 if (boardSum == 0 && i == board!!.size / 2) {
                     currentValue += 0.1 // Bias towards a first move at the center
                 }
@@ -210,10 +210,10 @@ class TicTacToe {
      * - anything else returns the sum of what the donwstream moves returned;
      * - exception: the opponent's move returns that divided by 2 to account for distance.
      */
-    private fun evaluateTree(move: Int, depth: Int, innerBoard: IntArray): Double {
+    private fun evaluateTree(depth: Int, innerBoard: IntArray): Double {
         // depth 0 = computer's first move move, 1 = opponent's first move, 2...
         var value = 0.0 // tree starting value is always 0
-        var solution = 0.0
+        var solution: Double
         var noMoreMoves = true // Default: there are no available moves
         iterations++
         if (depth % 2 == 0) { // The computer is playing
@@ -224,7 +224,7 @@ class TicTacToe {
                 if (innerBoard[i] == 0) { // the move is playable
                     noMoreMoves = false // There are available moves
                     innerBoard[i] = human
-                    solution = evaluateTree(i, depth + 1, innerBoard)
+                    solution = evaluateTree(depth + 1, innerBoard)
                     innerBoard[i] = 0 // Reset for the next iterations
                     if (value == 0.0 || solution < value) value = solution
                 }
@@ -237,7 +237,7 @@ class TicTacToe {
                 if (innerBoard[i] == 0) { // the move is playable
                     noMoreMoves = false // There are available moves
                     innerBoard[i] = computer
-                    solution = evaluateTree(i, depth + 1, innerBoard)
+                    solution = evaluateTree(depth + 1, innerBoard)
                     innerBoard[i] = 0 // Reset for the next iterations
                     if (solution > value) value = solution
                 }
@@ -339,13 +339,13 @@ class TicTacToe {
      * Resets the game.
      */
     fun reset() {
-        val boardLength = Math.pow(BOARD_SIZE.toDouble(), 2.0) as Int
+        val boardLength = Math.pow(BOARD_SIZE.toDouble(), 2.0).toInt()
         board = IntArray(boardLength)
         for (i in 0 until boardLength) {
             board!![i] = 0
         }
         // Choose randomly who plays first.
-        computer = Math.round(Math.random()) as Int + 1
+        computer = Math.round(Math.random()).toInt() + 1
         human = if (computer == 1) 2 else 1
         winner = 0
         // Zeroes the counters
@@ -390,51 +390,55 @@ class TicTacToe {
         }
     }
 
-    // main method
-    fun main(args: Array<String>) {
-        val keyboard = Scanner(System.`in`)
-        var play = true
-        var repeatInput = true
-        var input: String
-        val game = TicTacToe()
+}
 
-        println("This program is going to play tic tac toe with you.")
-        println("Each slot on the board is represented by a number, like this:")
-        println("1 | 2 | 3")
-        println("---------")
-        println("4 | 5 | 6")
-        println("---------")
-        println("7 | 8 | 9")
-        println("When your turn is called, you will have to enter your move and press ENTER.")
+// main method
+fun main() {
+    val keyboard = Scanner(System.`in`)
+    var play = true
+    var repeatInput: Boolean
+    var input: String
+    val game = TicTacToe()
 
-        while (play) {
-            game.play()
-            // Check if the player wants to play again. Default: yes.
-            repeatInput = true
-            while (repeatInput) {
-                println("Do you want to play again? [y|n]")
-                System.out.print(">:")
-                input = keyboard.nextLine()
-                if (input.length > 0) {
-                    when (input.toLowerCase()[0]) {
-                        'n' -> {
-                            play =
-                                false // No need to break, case 'y' has only one condition and it's good for 'n' too
-                            repeatInput = false
-                        }
-                        'y' -> repeatInput = false
-                        else -> {
-                            println("ERROR: invalid input.")
-                            repeatInput = true
-                        }
+    println("This program is going to play tic tac toe with you.")
+    println("Each slot on the board is represented by a number, like this:")
+    println("1 | 2 | 3")
+    println("---------")
+    println("4 | 5 | 6")
+    println("---------")
+    println("7 | 8 | 9")
+    println("When your turn is called, you will have to enter your move and press ENTER.")
+
+    while (play) {
+        game.play()
+        // Check if the player wants to play again. Default: yes.
+        repeatInput = true
+        while (repeatInput) {
+            prompt("Do you want to play again? [y|n]")
+            input = keyboard.nextLine()
+            if (input.length > 0) {
+                when (input.toLowerCase()[0]) {
+                    'n' -> {
+                        play =
+                            false // No need to break, case 'y' has only one condition and it's good for 'n' too
+                        repeatInput = false
                     }
-                } else {
-                    println("ERROR: invalid input.")
-                    repeatInput = true
+                    'y' -> repeatInput = false
+                    else -> {
+                        println("ERROR: invalid input.")
+                        repeatInput = true
+                    }
                 }
+            } else {
+                println("ERROR: invalid input.")
+                repeatInput = true
             }
-            if (play) game.reset() // Only if the user plays again, reset the board for the next iteration.
         }
+        if (play) game.reset() // Only if the user plays again, reset the board for the next iteration.
     }
+}
 
+private fun prompt(text: String = "") {
+    println(text)
+    print(">:")
 }
