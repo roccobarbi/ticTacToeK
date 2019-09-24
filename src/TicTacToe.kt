@@ -1,4 +1,5 @@
 import java.util.Scanner
+import kotlin.math.roundToInt
 
 /**
  * Implements a program that plays tic tac toe against a human player.
@@ -33,7 +34,7 @@ class TicTacToe(debug: Boolean = false) {
             board!![i] = 0
         }
         // Choose randomly who plays first.
-        computer = Math.round(Math.random()).toInt() + 1
+        computer = Math.random().roundToInt() + 1
         human = if (computer == 1) 2 else 1
         winner = 0
         // Zeroes the counters
@@ -342,7 +343,7 @@ enum class Language {
 
 private fun displayInstructions(lang:Language = Language.EN) {
     val instructions:Array<String> = arrayOf(
-        """"
+        """
             |This program is going to play tic tac toe with you.
             |Each slot on the board is represented by a number, like this:
             |1 | 2 | 3
@@ -351,8 +352,8 @@ private fun displayInstructions(lang:Language = Language.EN) {
             |---------
             |7 | 8 | 9
             |When your turn is called, you will have to enter your move and press ENTER.
-            """".trimMargin(),
-        """"
+            """.trimMargin(),
+        """
             |Questo programma ti sfiderà in una partita a tris.
             |Ogni posizione nel gioco è rappresentata da un numero:
             |1 | 2 | 3
@@ -361,7 +362,7 @@ private fun displayInstructions(lang:Language = Language.EN) {
             |---------
             |7 | 8 | 9
             |Al tuo turno, inserisci la posizione in cui vuoi muovere e premi INVIO.
-            """".trimMargin()
+            """.trimMargin()
     )
     println(instructions[lang.ordinal])
 }
