@@ -83,7 +83,7 @@ class TicTacToe {
         timeStart = System.currentTimeMillis() // Log the start time of the evaluation phase
 
         for (i in 0..8) {
-            if (DEBUG) System.out.println("validateMove for " + i + " returns " + validateMove(i))
+            if (DEBUG) println("validateMove for " + i + " returns " + validateMove(i))
             if (validateMove(i)) { // The move is playable
                 tempBoard[i] = computer
                 currentScore = evaluateTree2(tempBoard, 0)
@@ -92,13 +92,13 @@ class TicTacToe {
                     move = i
                 }
                 tempBoard[i] = 0
-                if (DEBUG) System.out.println("$i -> $currentScore")
+                if (DEBUG) println("$i -> $currentScore")
             }
         }
 
         timeEnd = System.currentTimeMillis() // Log the end time of the evaluation phase
         setDuration()
-        if (DEBUG) System.out.println("move -> $move")
+        if (DEBUG) println("move -> $move")
         return move
     }
 
@@ -172,17 +172,17 @@ class TicTacToe {
                 tempBoard[i] = human // Check if a move here would get a win to the opponent
                 if (checkVictory(tempBoard) == human) {
                     currentValue = 0.75 // Start from a higher current value.
-                    if (DEBUG) System.out.println("Cell " + (i + 1) + " instant loss found! Current value: " + currentValue)
+                    if (DEBUG) println("Cell " + (i + 1) + " instant loss found! Current value: " + currentValue)
                 } else {
                     currentValue = 0.0 // Zero the current value.
-                    if (DEBUG) System.out.println("Cell " + (i + 1) + " instant loss not found! Current value: " + currentValue)
+                    if (DEBUG) println("Cell " + (i + 1) + " instant loss not found! Current value: " + currentValue)
                 }
                 tempBoard[i] = computer // Assign the move to the temporary board
                 currentValue += evaluateTree(i, 0, tempBoard)
                 if (boardSum == 0 && i == board!!.size / 2) {
                     currentValue += 0.1 // Bias towards a first move at the center
                 }
-                if (DEBUG) System.out.println("Cell " + (i + 1) + " = " + currentValue)
+                if (DEBUG) println("Cell " + (i + 1) + " = " + currentValue)
                 if (currentValue > maxValue) {
                     move = i
                     maxValue = currentValue
@@ -249,15 +249,15 @@ class TicTacToe {
         var isValidMove = false
         val keyboard = Scanner(System.`in`)
         while (!isValidMove) {
-            System.out.println()
-            System.out.println("Inserisci la tua mossa e premi invio:")
+            println()
+            println("Inserisci la tua mossa e premi invio:")
             System.out.print(">: ")
             if (keyboard.hasNextInt()) {
                 move = keyboard.nextInt() - 1
                 isValidMove = validateMove(move)
-                if (!isValidMove) System.out.println("Mossa non valida.")
+                if (!isValidMove) println("Mossa non valida.")
             } else {
-                System.out.println("ERRORE: input non valido. Devi inserire il numero di una casella da 1 a 9")
+                println("ERRORE: input non valido. Devi inserire il numero di una casella da 1 a 9")
             }
             keyboard.nextLine() // Flushes the line.
         }
@@ -323,13 +323,13 @@ class TicTacToe {
      * Prints the current board to the screen
      */
     fun printBoard() {
-        System.out.println()
-        System.out.println(board!![0].toString() + " | " + board!![1] + " | " + board!![2])
-        System.out.println("---------")
-        System.out.println(board!![3].toString() + " | " + board!![4] + " | " + board!![5])
-        System.out.println("---------")
-        System.out.println(board!![6].toString() + " | " + board!![7] + " | " + board!![8])
-        System.out.println()
+        println()
+        println(board!![0].toString() + " | " + board!![1] + " | " + board!![2])
+        println("---------")
+        println(board!![3].toString() + " | " + board!![4] + " | " + board!![5])
+        println("---------")
+        println(board!![6].toString() + " | " + board!![7] + " | " + board!![8])
+        println()
     }
 
     /**
@@ -358,85 +358,82 @@ class TicTacToe {
      */
     fun play() {
         if (computer < human) {
-            System.out.println("Il computer gioca per primo con il numero $computer")
-            System.out.println("Tu giochi per secondo con il numero $human")
+            println("Il computer gioca per primo con il numero $computer")
+            println("Tu giochi per secondo con il numero $human")
         } else {
-            System.out.println("Tu giochi per primo con il numero $human")
-            System.out.println("Il computer gioca per secondo con il numero $computer")
+            println("Tu giochi per primo con il numero $human")
+            println("Il computer gioca per secondo con il numero $computer")
         }
         while (winner == 0) { // Continua a giocare finché non emerge un vincitore
             if (currentMove == human) {
                 board[askMove()] = human
             } else {
                 board[chooseMove2()] = computer
-                if (DEBUG) System.out.println("Duration: $duration ms")
-                if (DEBUG) System.out.println("Iterations: $iterations")
+                if (DEBUG) println("Duration: $duration ms")
+                if (DEBUG) println("Iterations: $iterations")
             }
             winner = checkVictory(board!!)
             printBoard() // show current board
             currentMove = if (currentMove == 1) 2 else 1 // New turn, new player.
         }
         if (winner == -1) { // Tied game
-            System.out.println()
-            System.out.println("The game is tied: nobody won.")
-            System.out.println()
+            println()
+            println("The game is tied: nobody won.")
+            println()
         } else { // Somebody won the game
-            System.out.println()
-            System.out.println((if (winner == human) "You" else "The computer") + " won the game.")
-            System.out.println()
+            println()
+            println((if (winner == human) "You" else "The computer") + " won the game.")
+            println()
         }
     }
 
-    companion object {
-        // Constants
-        private val BOARD_SIZE = 3 // Lato del tabellone
-        private val DEBUG = true // Debug mode
+    val BOARD_SIZE = 3 // Lato del tabellone
+    val DEBUG = true // Debug mode
 
-        // main method
-        fun main(args: Array<String>) {
-            val keyboard = Scanner(System.`in`)
-            var play = true
-            var repeatInput = true
-            var input: String
-            val game = TicTacToe()
+    // main method
+    fun main(args: Array<String>) {
+        val keyboard = Scanner(System.`in`)
+        var play = true
+        var repeatInput = true
+        var input: String
+        val game = TicTacToe()
 
-            System.out.println("This program is going to play tic tac toe with you.")
-            System.out.println("Each slot on the board is represented by a number, like this:")
-            System.out.println("1 | 2 | 3")
-            System.out.println("---------")
-            System.out.println("4 | 5 | 6")
-            System.out.println("---------")
-            System.out.println("7 | 8 | 9")
-            System.out.println("When your turn is called, you will have to enter your move and press ENTER.")
+        println("This program is going to play tic tac toe with you.")
+        println("Each slot on the board is represented by a number, like this:")
+        println("1 | 2 | 3")
+        println("---------")
+        println("4 | 5 | 6")
+        println("---------")
+        println("7 | 8 | 9")
+        println("When your turn is called, you will have to enter your move and press ENTER.")
 
-            while (play) {
-                game.play()
-                // Check if the player wants to play again. Default: yes.
-                repeatInput = true
-                while (repeatInput) {
-                    System.out.println("Do you want to play again? [y|n]")
-                    System.out.print(">:")
-                    input = keyboard.nextLine()
-                    if (input.length() > 0) {
-                        when (input.toLowerCase().charAt(0)) {
-                            'n' -> {
-                                play =
-                                    false // No need to break, case 'y' has only one condition and it's good for 'n' too
-                                repeatInput = false
-                            }
-                            'y' -> repeatInput = false
-                            else -> {
-                                System.out.println("ERROR: invalid input.")
-                                repeatInput = true
-                            }
+        while (play) {
+            game.play()
+            // Check if the player wants to play again. Default: yes.
+            repeatInput = true
+            while (repeatInput) {
+                println("Do you want to play again? [y|n]")
+                System.out.print(">:")
+                input = keyboard.nextLine()
+                if (input.length() > 0) {
+                    when (input.toLowerCase().charAt(0)) {
+                        'n' -> {
+                            play =
+                                false // No need to break, case 'y' has only one condition and it's good for 'n' too
+                            repeatInput = false
                         }
-                    } else {
-                        System.out.println("ERROR: invalid input.")
-                        repeatInput = true
+                        'y' -> repeatInput = false
+                        else -> {
+                            println("ERROR: invalid input.")
+                            repeatInput = true
+                        }
                     }
+                } else {
+                    println("ERROR: invalid input.")
+                    repeatInput = true
                 }
-                if (play) game.reset() // Only if the user plays again, reset the board for the next iteration.
             }
+            if (play) game.reset() // Only if the user plays again, reset the board for the next iteration.
         }
     }
 
