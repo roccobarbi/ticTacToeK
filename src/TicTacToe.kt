@@ -1,5 +1,3 @@
-package ticTacToeK
-
 import java.util.Scanner
 
 /**
