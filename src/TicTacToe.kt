@@ -314,6 +314,9 @@ fun main(args: Array<String>) {
     println("---------")
     println("7 | 8 | 9")
     println("When your turn is called, you will have to enter your move and press ENTER.")
+    prompt("Press ENTER when ready.")
+    keyboard.nextLine()
+
 
     while (play) {
         game.play()
