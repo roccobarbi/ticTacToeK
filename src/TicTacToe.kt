@@ -18,21 +18,14 @@ class TicTacToe {
 
     // Private fields
     private var board: IntArray? = null
-    var computer: Int = 0
-        private set
-    var human: Int = 0
-        private set // Each holds the number that identifies each player (1 or 2)
+    private var computer: Int = 0
+    private var human: Int = 0
     private var currentMove: Int = 0
-    var winner: Int = 0
-        private set // Identify who should move now and who won the game
-    var timeStart: Long = 0
-        private set
-    var timeEnd: Long = 0
-        private set
-    var duration: Long = 0
-        private set
-    var iterations: Long = 0
-        private set
+    private var winner: Int = 0
+    private var timeStart: Long = 0
+    private var timeEnd: Long = 0
+    private var duration: Long = 0
+    private var iterations: Long = 0
 
     // Constructors
     init {
