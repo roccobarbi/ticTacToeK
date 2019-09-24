@@ -1,4 +1,4 @@
-package ticTacToe
+package ticTacToeK
 
 import java.util.Scanner
 
@@ -9,7 +9,7 @@ import java.util.Scanner
  *
  * Accepts a --verbose argument to show more information about how the computer calculated a move.
  *
- * @author Rocco Barbini
+ * @author Rocco Barbini (roccobarbi@gmail.com)
  */
 class TicTacToe {
 
