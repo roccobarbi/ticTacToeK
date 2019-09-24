@@ -296,51 +296,55 @@ class TicTacToe(debug: Boolean = false) {
 
 // main method
 fun main(args: Array<String>) {
-    val keyboard = Scanner(System.`in`)
-    var play = true
-    var repeatInput: Boolean
-    var input: String
-    val debug = "--debug" in args
-    val game = TicTacToe(debug)
+    try {
+        val keyboard = Scanner(System.`in`)
+        var play = true
+        var repeatInput: Boolean
+        var input: String
+        val debug = "--debug" in args
+        val game = TicTacToe(debug)
 
-    println("This program is going to play tic tac toe with you.")
-    println("Each slot on the board is represented by a number, like this:")
-    println("1 | 2 | 3")
-    println("---------")
-    println("4 | 5 | 6")
-    println("---------")
-    println("7 | 8 | 9")
-    println("When your turn is called, you will have to enter your move and press ENTER.")
-    prompt("Press ENTER when ready.")
-    keyboard.nextLine()
+        println("This program is going to play tic tac toe with you.")
+        println("Each slot on the board is represented by a number, like this:")
+        println("1 | 2 | 3")
+        println("---------")
+        println("4 | 5 | 6")
+        println("---------")
+        println("7 | 8 | 9")
+        println("When your turn is called, you will have to enter your move and press ENTER.")
+        prompt("Press ENTER when ready.")
+        keyboard.nextLine()
 
 
-    while (play) {
-        game.play()
-        // Check if the player wants to play again. Default: yes.
-        repeatInput = true
-        while (repeatInput) {
-            prompt("Do you want to play again? [y|n]")
-            input = keyboard.nextLine()
-            if (input.length > 0) {
-                when (input.toLowerCase()[0]) {
-                    'n' -> {
-                        play =
-                            false // No need to break, case 'y' has only one condition and it's good for 'n' too
-                        repeatInput = false
+        while (play) {
+            game.play()
+            // Check if the player wants to play again. Default: yes.
+            repeatInput = true
+            while (repeatInput) {
+                prompt("Do you want to play again? [y|n]")
+                input = keyboard.nextLine()
+                if (input.length > 0) {
+                    when (input.toLowerCase()[0]) {
+                        'n' -> {
+                            play =
+                                false // No need to break, case 'y' has only one condition and it's good for 'n' too
+                            repeatInput = false
+                        }
+                        'y' -> repeatInput = false
+                        else -> {
+                            println("ERROR: invalid input.")
+                            repeatInput = true
+                        }
                     }
-                    'y' -> repeatInput = false
-                    else -> {
-                        println("ERROR: invalid input.")
-                        repeatInput = true
-                    }
+                } else {
+                    println("ERROR: invalid input.")
+                    repeatInput = true
                 }
-            } else {
-                println("ERROR: invalid input.")
-                repeatInput = true
             }
+            if (play) game.reset() // Only if the user plays again, reset the board for the next iteration.
         }
-        if (play) game.reset() // Only if the user plays again, reset the board for the next iteration.
+    } catch (e: Error) {
+        println(e.stackTrace)
     }
 }
 
