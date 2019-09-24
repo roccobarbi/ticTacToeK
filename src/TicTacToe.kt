@@ -64,7 +64,7 @@ class TicTacToe {
     }
 
     // Private methods
-    private fun chooseMove2(): Int { // To record the iterations and duration for debugging purposes
+    private fun chooseMove(): Int { // To record the iterations and duration for debugging purposes
         var move = board!!.size / 2 // Default move
         var currentScore: Int
         var maxScore = -100
@@ -82,7 +82,7 @@ class TicTacToe {
             if (DEBUG) println("validateMove for " + i + " returns " + validateMove(i))
             if (validateMove(i)) { // The move is playable
                 tempBoard[i] = computer
-                currentScore = evaluateTree2(tempBoard, 0)
+                currentScore = evaluateTree(tempBoard, 0)
                 if (currentScore > maxScore) {
                     maxScore = currentScore
                     move = i
@@ -98,7 +98,7 @@ class TicTacToe {
         return move
     }
 
-    private fun evaluateTree2(tempBoard: IntArray, depth: Int): Int { // A better, self-contained version
+    private fun evaluateTree(tempBoard: IntArray, depth: Int): Int { // A better, self-contained version
         var score = 0
         var currentScore: Int
         var noMovesAvailable = true // Default: the game is a draw at this stage
@@ -130,7 +130,7 @@ class TicTacToe {
                 else
                     tempBoard[i] = computer // The next move is the computer's
 
-                currentScore = evaluateTree2(tempBoard, depth + 1)
+                currentScore = evaluateTree(tempBoard, depth + 1)
 
                 if (!scoreChanged)
                     score = currentScore // Default
@@ -149,95 +149,6 @@ class TicTacToe {
         return if (noMovesAvailable) { // Caso base di riserva: non ci sono mosse disponibili
             10 - depth
         } else score
-    }
-
-    private fun chooseMove(): Int {
-        var move = board!!.size / 2 // Default move
-        var currentValue: Double
-        var maxValue = 0.0 // the current and maximum tree evaluation up to now
-        val tempBoard = IntArray(board!!.size)
-        var boardSum = 0 // Checks if all cells are empty and moves to center.
-        iterations = 0
-        timeStart = System.currentTimeMillis() // Log the start time of the evaluation phase
-        for (i in board!!.indices) { // This will be used by evaluateTree
-            tempBoard[i] = board!![i]
-            boardSum += tempBoard[i]
-        }
-        for (i in board!!.indices) {
-            if (validateMove(i)) {
-                tempBoard[i] = human // Check if a move here would get a win to the opponent
-                if (checkVictory(tempBoard) == human) {
-                    currentValue = 0.75 // Start from a higher current value.
-                    if (DEBUG) println("Cell " + (i + 1) + " instant loss found! Current value: " + currentValue)
-                } else {
-                    currentValue = 0.0 // Zero the current value.
-                    if (DEBUG) println("Cell " + (i + 1) + " instant loss not found! Current value: " + currentValue)
-                }
-                tempBoard[i] = computer // Assign the move to the temporary board
-                currentValue += evaluateTree(0, tempBoard)
-                if (boardSum == 0 && i == board!!.size / 2) {
-                    currentValue += 0.1 // Bias towards a first move at the center
-                }
-                if (DEBUG) println("Cell " + (i + 1) + " = " + currentValue)
-                if (currentValue > maxValue) {
-                    move = i
-                    maxValue = currentValue
-                } else if (maxValue == 0.0 && !validateMove(move)) {
-                    move = i
-                }
-                tempBoard[i] = 0 // Zero it
-            }
-        }
-        timeEnd = System.currentTimeMillis() // Log the end time of the evaluation phase
-        setDuration()
-        return move
-    }
-
-    /*
-     * Evaluate tree: takes a move and returns the score for the subsequent decision tree
-     * At each step:
-     * - an invalid move returns 0;
-     * - a move that puts the opponent in a winning position returns 0;
-     * - an opponent's winning move returns -1;
-     * - a winning move returns 1;
-     * - anything else returns the sum of what the donwstream moves returned;
-     * - exception: the opponent's move returns that divided by 2 to account for distance.
-     */
-    private fun evaluateTree(depth: Int, innerBoard: IntArray): Double {
-        // depth 0 = computer's first move move, 1 = opponent's first move, 2...
-        var value = 0.0 // tree starting value is always 0
-        var solution: Double
-        var noMoreMoves = true // Default: there are no available moves
-        iterations++
-        if (depth % 2 == 0) { // The computer is playing
-            if (checkVictory(innerBoard) == computer) {
-                return 1.0
-            }
-            for (i in innerBoard.indices) {
-                if (innerBoard[i] == 0) { // the move is playable
-                    noMoreMoves = false // There are available moves
-                    innerBoard[i] = human
-                    solution = evaluateTree(depth + 1, innerBoard)
-                    innerBoard[i] = 0 // Reset for the next iterations
-                    if (value == 0.0 || solution < value) value = solution
-                }
-            }
-        } else { // The opponent is playing
-            if (checkVictory(innerBoard) == human) {
-                return -1.0
-            }
-            for (i in innerBoard.indices) {
-                if (innerBoard[i] == 0) { // the move is playable
-                    noMoreMoves = false // There are available moves
-                    innerBoard[i] = computer
-                    solution = evaluateTree(depth + 1, innerBoard)
-                    innerBoard[i] = 0 // Reset for the next iterations
-                    if (solution > value) value = solution
-                }
-            }
-        }
-        if (noMoreMoves) value = 0.5 // A tie is better than a loss, but worse than a win
-        return value
     }
 
     private fun askMove(): Int { // Asks the move to the player and validates it
@@ -364,7 +275,7 @@ class TicTacToe {
             if (currentMove == human) {
                 board?.set(askMove(), human)
             } else {
-                board?.set(chooseMove2(), computer)
+                board?.set(chooseMove(), computer)
                 if (DEBUG) println("Duration: $duration ms")
                 if (DEBUG) println("Iterations: $iterations")
             }
