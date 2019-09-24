@@ -13,6 +13,9 @@ import java.util.Scanner
  */
 class TicTacToe {
 
+    val BOARD_SIZE = 3 // Lato del tabellone
+    val DEBUG = true // Debug mode
+
     // Private fields
     private var board: IntArray? = null
     var computer: Int = 0
@@ -33,10 +36,10 @@ class TicTacToe {
 
     // Constructors
     init {
-        val boardLength = Math.pow(BOARD_SIZE, 2) as Int
+        val boardLength = Math.pow(BOARD_SIZE.toDouble(), 2.0) as Int
         board = IntArray(boardLength)
         for (i in 0 until boardLength) {
-            board[i] = 0
+            board!![i] = 0
         }
         // Choose randomly who plays first.
         computer = Math.round(Math.random()) as Int + 1
@@ -336,10 +339,10 @@ class TicTacToe {
      * Resets the game.
      */
     fun reset() {
-        val boardLength = Math.pow(BOARD_SIZE, 2) as Int
+        val boardLength = Math.pow(BOARD_SIZE.toDouble(), 2.0) as Int
         board = IntArray(boardLength)
         for (i in 0 until boardLength) {
-            board[i] = 0
+            board!![i] = 0
         }
         // Choose randomly who plays first.
         computer = Math.round(Math.random()) as Int + 1
@@ -366,9 +369,9 @@ class TicTacToe {
         }
         while (winner == 0) { // Continua a giocare finché non emerge un vincitore
             if (currentMove == human) {
-                board[askMove()] = human
+                board?.set(askMove(), human)
             } else {
-                board[chooseMove2()] = computer
+                board?.set(chooseMove2(), computer)
                 if (DEBUG) println("Duration: $duration ms")
                 if (DEBUG) println("Iterations: $iterations")
             }
@@ -386,9 +389,6 @@ class TicTacToe {
             println()
         }
     }
-
-    val BOARD_SIZE = 3 // Lato del tabellone
-    val DEBUG = true // Debug mode
 
     // main method
     fun main(args: Array<String>) {
@@ -415,8 +415,8 @@ class TicTacToe {
                 println("Do you want to play again? [y|n]")
                 System.out.print(">:")
                 input = keyboard.nextLine()
-                if (input.length() > 0) {
-                    when (input.toLowerCase().charAt(0)) {
+                if (input.length > 0) {
+                    when (input.toLowerCase()[0]) {
                         'n' -> {
                             play =
                                 false // No need to break, case 'y' has only one condition and it's good for 'n' too
