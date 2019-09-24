@@ -46,14 +46,6 @@ class TicTacToe(debug: Boolean = false) {
 
     // Accessors
 
-    fun getBoard(): IntArray {
-        val tempBoard = IntArray(board!!.size)
-        for (i in board!!.indices) {
-            tempBoard[i] = board!![i]
-        }
-        return tempBoard
-    }
-
     private fun setDuration() {
         if (timeEnd > timeStart)
             duration = timeEnd - timeStart
@@ -304,14 +296,7 @@ fun main(args: Array<String>) {
         val debug = "--debug" in args
         val game = TicTacToe(debug)
 
-        println("This program is going to play tic tac toe with you.")
-        println("Each slot on the board is represented by a number, like this:")
-        println("1 | 2 | 3")
-        println("---------")
-        println("4 | 5 | 6")
-        println("---------")
-        println("7 | 8 | 9")
-        println("When your turn is called, you will have to enter your move and press ENTER.")
+        displayInstructions()
         prompt("Press ENTER when ready.")
         keyboard.nextLine()
 
@@ -346,6 +331,39 @@ fun main(args: Array<String>) {
     } catch (e: Error) {
         println(e.stackTrace)
     }
+}
+
+/**
+ * Provide basic internationalisation features
+ */
+enum class Language {
+    EN, IT
+}
+
+private fun displayInstructions(lang:Language = Language.EN) {
+    val instructions:Array<String> = arrayOf(
+        """"
+            |This program is going to play tic tac toe with you.
+            |Each slot on the board is represented by a number, like this:
+            |1 | 2 | 3
+            |---------
+            |4 | 5 | 6
+            |---------
+            |7 | 8 | 9
+            |When your turn is called, you will have to enter your move and press ENTER.
+            """".trimMargin(),
+        """"
+            |Questo programma ti sfiderà in una partita a tris.
+            |Ogni posizione nel gioco è rappresentata da un numero:
+            |1 | 2 | 3
+            |---------
+            |4 | 5 | 6
+            |---------
+            |7 | 8 | 9
+            |Al tuo turno, inserisci la posizione in cui vuoi muovere e premi INVIO.
+            """".trimMargin()
+    )
+    println(instructions[lang.ordinal])
 }
 
 private fun prompt(text: String = "") {
