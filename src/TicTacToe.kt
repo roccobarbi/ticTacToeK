@@ -318,7 +318,7 @@ class TicTacToe {
     /**
      * Prints the current board to the screen
      */
-    fun printBoard() {
+    private fun printBoard() {
         println()
         println(board!![0].toString() + " | " + board!![1] + " | " + board!![2])
         println("---------")
