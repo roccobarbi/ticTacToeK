@@ -11,10 +11,10 @@ import java.util.Scanner
  *
  * @author Rocco Barbini (roccobarbi@gmail.com)
  */
-class TicTacToe {
+class TicTacToe(debug: Boolean = false) {
 
     val BOARD_SIZE = 3 // Lato del tabellone
-    val DEBUG: Boolean // Debug mode can be set only when the object is constructed
+    val DEBUG: Boolean = debug // Debug mode can be set only when the object is constructed
 
     // Private fields
     private var board: IntArray? = null
@@ -28,10 +28,9 @@ class TicTacToe {
     private var iterations: Long = 0
 
     // Constructors
-    constructor (debug: Boolean = false) {
+    init {
         val boardLength = Math.pow(BOARD_SIZE.toDouble(), 2.0).toInt()
         board = IntArray(boardLength)
-        DEBUG = debug
         for (i in 0 until boardLength) {
             board!![i] = 0
         }
